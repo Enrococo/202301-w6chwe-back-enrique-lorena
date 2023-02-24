@@ -1,7 +1,6 @@
 import crypto from 'node:crypto';
 import { RequestHandler } from 'express';
 import { RobotModel } from './robots-schema.js';
-import { robotSchema } from './robots-schema.js';
 
 export const getRobotsController: RequestHandler = async (_req, res) => {
   try {
@@ -14,7 +13,7 @@ export const getRobotsController: RequestHandler = async (_req, res) => {
 
 export const createRobotController: RequestHandler = async (req, res) => {
   const id = crypto.randomUUID();
-  const robot: typeof robotSchema = {
+  const robot: typeof RobotModel = {
     id,
     ...req.body,
   };
