@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const robotSchema = new Schema({
+export const robotSchema = new Schema({
   id: String,
   name: String,
   speed: Number,

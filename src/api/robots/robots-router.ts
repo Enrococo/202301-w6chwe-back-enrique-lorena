@@ -1,9 +1,12 @@
 import express from 'express';
-import { getRobotsController } from './robots-controllers.js';
+import {
+  createRobotController,
+  getRobotsController,
+} from './robots-controllers.js';
 
 const router = express.Router();
 
-router.route('/').get(getRobotsController);
+router.route('/').get(getRobotsController).post(createRobotController);
 
 router.route('/:id');
 
