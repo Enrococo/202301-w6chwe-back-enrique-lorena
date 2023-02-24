@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import {
   getRobotsController,
   createRobotController,
+  getRobotByIdController,
 } from './robots-controllers.js';
 import { RobotModel } from './robots-schema.js';
 
@@ -63,5 +64,34 @@ describe('Given a createRobotController function from robotsController', () => {
       .mockRejectedValue(new Error('something went wrong'));
     await createRobotController(request, response as Response, jest.fn());
     expect(response.status).toHaveBeenCalledWith(500);
+  });
+});
+
+describe('Given a getRobotByIdController from robotController', () => {
+  const request = {
+    params: { id: 'mockId' },
+  } as Partial<Request>;
+  const response = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  } as Partial<Response>;
+
+  const robot = {
+    id: 'mockId',
+    name: 'pepito',
+    speed: 3,
+    endurance: 3,
+    creationDate: '28/02/2023, 11:49:36 AM',
+  };
+
+  RobotModel.findById = jest.fn().mockResolvedValue(robot);
+
+  test('when the user exists then it should respond with a robot', async () => {
+    await getRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+    expect(response.json).toHaveBeenCalledWith(robot);
   });
 });
