@@ -3,7 +3,6 @@ import {
   getRobotsController,
   createRobotController,
   getRobotByIdController,
-  updateRobotByIdController,
 } from './robots-controllers.js';
 import { RobotModel } from './robots-schema.js';
 
@@ -68,36 +67,55 @@ describe('Given a createRobotController function from robotsController', () => {
   });
 });
 
-// Describe('Given a getRobotByIdController from robotController', () => {
-//   const request = {
-//     params: { id: 'mockId' },
-//   } as Partial<Request>;
-//   const response = {
-//     status: jest.fn().mockReturnThis(),
-//     json: jest.fn(),
-//   } as Partial<Response>;
+describe('Given a getRobotByIdController from robotController', () => {
+  const request = {
+    params: { id: 'mockId' },
+  } as Partial<Request>;
+  const response = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  } as Partial<Response>;
 
-//   const robot = {
-//     id: '01',
-//     name: 'r2q2',
-//     speed: 32,
-//     endurance: 5,
-//     creationDate: '28/02/2023, 11:49:36 AM',
-//   };
+  const robot = {
+    id: '01',
+    name: 'r2q2',
+    speed: 32,
+    endurance: 5,
+    creationDate: '28/02/2023, 11:49:36 AM',
+  };
 
-//   RobotModel.findById = jest.fn().mockResolvedValue(robot);
+  test('when the user exists then it should respond with a robot', async () => {
+    RobotModel.findById = jest.fn().mockResolvedValue(robot);
+    await getRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+    expect(response.json).toHaveBeenCalledWith(robot);
+  });
+});
 
-//   test('when the user exists then it should respond with a robot', async () => {
-//     await getRobotByIdController(
-//       request as Request,
-//       response as Response,
-//       jest.fn(),
-//     );
-//     expect(response.json).toHaveBeenCalledWith(robot);
-//   });
-// });
+describe('Given a getRobotByIdController from robotController', () => {
+  const request = {
+    params: { id: 'mockId' },
+  } as Partial<Request>;
+  const response = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  } as Partial<Response>;
 
-// describe('Given a updateRobotByController function from robotsController', () => {
+  test('when the robot does not exists then it should respond with an error', async () => {
+    RobotModel.findById = jest.fn().mockResolvedValue(null);
+    await getRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+    expect(response.json).toReturnWith(undefined);
+  });
+});
+
+// Describe('Given a updateRobotByController function from robotsController', () => {
 //   const request = {
 //     params: { id: 'mockId' },
 //   } as Partial<Request>;
@@ -181,4 +199,4 @@ describe('Given a createRobotController function from robotsController', () => {
 //     );
 //     expect(response.status).toBe(204);
 //   });
-// });
+// })

@@ -1,8 +1,8 @@
 import express from 'express';
-import villainsRouter from './robots/robots-router.js';
+import robotsRouter from './robots/robots-router.js';
 
 const router = express.Router();
 
-router.use('/robots', villainsRouter);
+router.use('/robots', robotsRouter);
 
 export default router;
