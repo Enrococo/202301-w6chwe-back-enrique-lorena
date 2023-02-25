@@ -38,3 +38,37 @@ export const getRobotByIdController: RequestHandler = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+export const updateRobotByIdController: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const dbRes = await RobotModel.updateOne({ _id: id }, { ...req.body });
+    if (dbRes.matchedCount === 0) {
+      res.sendStatus(404);
+    }
+
+    if (dbRes.modifiedCount === 1) {
+      res.sendStatus(204);
+    } else {
+      res.sendStatus(500);
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const deleteRobotByIdController: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const dbRes = await RobotModel.deleteOne({ _id: id });
+    if (dbRes.deletedCount === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
