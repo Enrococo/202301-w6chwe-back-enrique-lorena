@@ -66,7 +66,7 @@ export const deleteRobotByIdController: RequestHandler = async (req, res) => {
     if (dbRes.deletedCount === 0) {
       res.sendStatus(404);
     } else {
-      res.sendStatus(204);
+      res.json(id);
     }
   } catch (error) {
     res.status(500).json(error);

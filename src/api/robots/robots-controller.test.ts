@@ -3,6 +3,7 @@ import {
   getRobotsController,
   createRobotController,
   getRobotByIdController,
+  deleteRobotByIdController,
 } from './robots-controllers.js';
 import { RobotModel } from './robots-schema.js';
 
@@ -172,22 +173,48 @@ describe('Given a getRobotByIdController from robotController', () => {
 //   });
 // });
 
-// describe('Given a deleteRobotByIdController from robotController', () => {
-//   const request = {
-//     params: { id: 'mockId' },
-//   } as Partial<Request>;
-//   const response = {
-//     status: jest.fn().mockReturnThis(),
-//     json: jest.fn(),
-//   } as Partial<Response>;
+describe('Given a deleteRobotByIdController from robotController', () => {
+  const response = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+    sendStatus: jest.fn(),
+  } as Partial<Response>;
 
-//   const robot = {
-//     id: '01',
-//     name: 'r2q2',
-//     speed: 32,
-//     endurance: 5,
-//     creationDate: '28/02/2023, 11:49:36 AM',
-//   };
+  test('when the database response is successful, then it should resolve with the deleted robot id', async () => {
+    const request = { params: { id: 'mockId' } } as Partial<Request>;
+    RobotModel.deleteOne = jest.fn().mockReturnValue(0);
+    await deleteRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+
+    expect(response.json).toHaveBeenCalledWith(request.params?.id);
+  });
+
+  test('when the database answers with a 404, then it should send a 404 error', async () => {
+    const request = { params: { id: 'mockId' } } as Partial<Request>;
+    RobotModel.deleteOne = jest.fn().mockResolvedValue({ deletedCount: 0 });
+    await deleteRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+    expect(response.sendStatus).toHaveBeenCalledWith(404);
+  });
+  test('when the database responds with a 500, it should show the 500 status', async () => {
+    const request = { params: { id: 'mockId' } } as Partial<Request>;
+    RobotModel.deleteOne = jest
+      .fn()
+      .mockRejectedValue(new Error('something was wrong'));
+    await deleteRobotByIdController(
+      request as Request,
+      response as Response,
+      jest.fn(),
+    );
+    expect(response.status).toHaveBeenCalledWith(500);
+  });
+});
 
 //   RobotModel.deleteOne = jest.fn().mockResolvedValue({ deletedCount: 1 });
 
