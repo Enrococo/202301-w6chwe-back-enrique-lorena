@@ -12,5 +12,5 @@ app.use(cors());
 
 app.listen(port, async () => {
   await connectDB(mongoUrl);
-  log.info(`Server started in port ${port}`);
+  log.info(`Server has started in port ${port}`);
 });
