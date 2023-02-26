@@ -1,7 +1,10 @@
+import cors from 'cors';
 import express from 'express';
 import apiRouter from './api/api-router.js';
 
 const app = express();
+
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.json({ hello: 'World' });

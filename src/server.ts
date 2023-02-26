@@ -8,8 +8,6 @@ import cors from 'cors';
 const port = process.env.PORT ?? 3000;
 const mongoUrl = process.env.MONGO_DB ?? '';
 
-app.use(cors({ origin: '*' }));
-
 app.listen(port, async () => {
   await connectDB(mongoUrl);
   log.info(`Server has started in port ${port}`);
