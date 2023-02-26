@@ -8,7 +8,12 @@ import cors from 'cors';
 const port = process.env.PORT ?? 3000;
 const mongoUrl = process.env.MONGO_DB ?? '';
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://two02301-w6chwe-back-enrique-lorena.onrender.com/',
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.listen(port, async () => {
   await connectDB(mongoUrl);
