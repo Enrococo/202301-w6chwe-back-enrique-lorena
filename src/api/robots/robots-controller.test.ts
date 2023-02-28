@@ -26,15 +26,17 @@ describe('Given a getRobotsController function from robotsController', () => {
   ];
 
   test('when it is invoked it should return a list of robots', async () => {
-    RobotModel.find = jest.fn().mockResolvedValue(robots);
+    RobotModel.find = jest.fn().mockImplementation(() => ({
+      exec: jest.fn().mockResolvedValue(robots),
+    }));
     await getRobotsController(request, response as Response, jest.fn());
     expect(response.json).toHaveBeenCalledWith(robots);
   });
 
   test('when the database throws an error then it should response with status 500', async () => {
-    RobotModel.find = jest
-      .fn()
-      .mockRejectedValue(new Error('Something went wrong'));
+    RobotModel.find = jest.fn().mockImplementation(() => ({
+      exec: jest.fn().mockRejectedValue(new Error('Something went wrong')),
+    }));
     await getRobotsController(request, response as Response, jest.fn());
     expect(response.status).toHaveBeenCalledWith(500);
   });
