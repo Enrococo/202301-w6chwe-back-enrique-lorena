@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { RequestHandler } from 'express';
 import { RobotModel } from './robots-schema.js';
+import log from '../../logger.js';
 
 export const getRobotsController: RequestHandler = async (_req, res) => {
   try {
@@ -27,6 +28,8 @@ export const createRobotController: RequestHandler = async (req, res) => {
 
 export const getRobotByIdController: RequestHandler = async (req, res) => {
   const { id } = req.params;
+  const { email } = res.locals;
+  log.debug(`The email in the request is ${email}.`);
   try {
     const robot = await RobotModel.findById(id);
     if (robot === null) {
